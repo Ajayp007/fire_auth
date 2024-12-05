@@ -1,4 +1,8 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:fire_auth/utils/helper/fireauth_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/route_manager.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -11,6 +15,14 @@ class _SigninScreenState extends State<SigninScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController txtEmail = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
+  bool passwordVisible = false;
+  bool? check;
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +56,39 @@ class _SigninScreenState extends State<SigninScreen> {
                             borderRadius: BorderRadius.circular(12)),
                         fillColor: Colors.grey,
                         labelText: "Email"),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Email is required";
-                      }
-                      return null;
-                    },
+                    validator: (value) => EmailValidator.validate(value!)
+                        ? null
+                        : "Please enter a valid email",
                   ),
                   const SizedBox(
                     height: 30,
                   ),
                   TextFormField(
                     controller: txtPassword,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        fillColor: Colors.grey,
-                        labelText: "Password"),
+                    obscureText: passwordVisible,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return "Password is required";
+                        return "Please Enter Password";
                       }
                       return null;
                     },
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              passwordVisible = !passwordVisible;
+                            });
+                          },
+                          icon: Icon(passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        fillColor: Colors.grey,
+                        labelText: "Password"),
                   ),
                   const SizedBox(
                     height: 30,
@@ -78,7 +99,16 @@ class _SigninScreenState extends State<SigninScreen> {
                       textColor: Colors.white,
                       height: 40,
                       color: const Color(0xff084759),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          await FireAuthHelper.helper
+                              .signInAuth(txtEmail.text, txtPassword.text);
+                          check = FireAuthHelper.helper.checkUser();
+                          if (check!) {
+                            Get.offAllNamed('home');
+                          }
+                        }
+                      },
                       child: const Text("Sign in"),
                     ),
                   ),
@@ -91,7 +121,11 @@ class _SigninScreenState extends State<SigninScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       InkWell(
-                        onTap: () async {},
+                        onTap: () async {
+                          await FireAuthHelper.helper.signInWithGoogle();
+                          FireAuthHelper.helper.checkUser();
+                          Get.offAllNamed('home');
+                        },
                         child: Image.asset(
                           "assets/logo/google.png",
                           fit: BoxFit.cover,
@@ -113,7 +147,7 @@ class _SigninScreenState extends State<SigninScreen> {
                   const SizedBox(height: 50),
                   InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, 'signUp');
+                      Get.toNamed('up');
                     },
                     child: RichText(
                       text: const TextSpan(

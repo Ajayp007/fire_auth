@@ -1,34 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>CLIENT_ID</key>
-	<string>554134551522-adgev4fp45erusceua4bqrt8if8771c4.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.554134551522-adgev4fp45erusceua4bqrt8if8771c4</string>
-	<key>API_KEY</key>
-	<string>AIzaSyCIaD4olThjn5AgInOHVMn5ZFHmsKkR3dA</string>
-	<key>GCM_SENDER_ID</key>
-	<string>554134551522</string>
-	<key>PLIST_VERSION</key>
-	<string>1</string>
-	<key>BUNDLE_ID</key>
-	<string>com.example.fireAuth</string>
-	<key>PROJECT_ID</key>
-	<string>auth-6b85f</string>
-	<key>STORAGE_BUCKET</key>
-	<string>auth-6b85f.firebasestorage.app</string>
-	<key>IS_ADS_ENABLED</key>
-	<false></false>
-	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
-	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
-	<key>IS_GCM_ENABLED</key>
-	<true></true>
-	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
-	<key>GOOGLE_APP_ID</key>
-	<string>1:554134551522:ios:68a12333010b63683c17bb</string>
-</dict>
-</plist>
+{
+  "project_info": {
+    "project_number": "554134551522",
+    "project_id": "auth-6b85f",
+    "storage_bucket": "auth-6b85f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:554134551522:android:89a8bcce0505aa0d3c17bb",
+        "android_client_info": {
+          "package_name": "com.example.fire_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "554134551522-j2fd7ehdkbc2p67okkr2mc0ojfubm07c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4FyMqJ2Nh6WBAt2Gv8ZhiEs777zS-d-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "554134551522-j2fd7ehdkbc2p67okkr2mc0ojfubm07c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "554134551522-adgev4fp45erusceua4bqrt8if8771c4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fireAuth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,15 +1,136 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:fire_auth/utils/helper/fireauth_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignupScreenState extends State<SignupScreen> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController txtEmail = TextEditingController();
+  TextEditingController txtPassword = TextEditingController();
+  bool passwordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Image.asset(
+                    "assets/logo/Login-pana (1).png",
+                    height: 300,
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    controller: txtEmail,
+                    validator: (value) => EmailValidator.validate(value!)
+                        ? null
+                        : "Please enter a valid email",
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        fillColor: Colors.grey,
+                        labelText: "Email"),
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    controller: txtPassword,
+                    obscureText: passwordVisible,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Please Enter Password";
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.visiblePassword,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              passwordVisible = !passwordVisible;
+                            });
+                          },
+                          icon: Icon(passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        fillColor: Colors.grey,
+                        labelText: "Password"),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: MediaQuery.sizeOf(context).width,
+                    child: MaterialButton(
+                      textColor: Colors.white,
+                      height: 40,
+                      color: const Color(0xff084759),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          await FireAuthHelper.helper
+                              .signUpAuth(txtEmail.text, txtPassword.text);
+                          Get.back();
+                        }
+                      },
+                      child: const Text("Sign Up"),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  InkWell(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Already have an account?",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
+                          TextSpan(
+                            text: " Sign In",
+                            style: TextStyle(
+                                color: Color(0xff084759),
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
