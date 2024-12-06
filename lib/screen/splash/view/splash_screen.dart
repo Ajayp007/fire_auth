@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fire_auth/screen/home/controller/home_controller.dart';
 import 'package:fire_auth/utils/helper/fireauth_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,9 +13,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  HomeController controller = Get.put(HomeController());
+
   @override
   void initState() {
     bool check = FireAuthHelper.helper.checkUser();
+    if (check) {
+      controller.getCurrentUser();
+    }
 
     Timer(
       const Duration(seconds: 3),
@@ -22,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Get.offAllNamed(check ? 'home' : 'si');
       },
     );
+    super.initState();
     super.initState();
   }
 

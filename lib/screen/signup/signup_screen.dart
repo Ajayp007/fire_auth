@@ -1,5 +1,8 @@
 import 'package:email_validator/email_validator.dart';
+import 'package:fire_auth/screen/home/controller/home_controller.dart';
+import 'package:fire_auth/screen/home/model/home_model.dart';
 import 'package:fire_auth/utils/helper/fireauth_helper.dart';
+import 'package:fire_auth/utils/helper/firedb_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,13 +16,16 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController txtEmail = TextEditingController();
+  TextEditingController txtName = TextEditingController();
   TextEditingController txtPassword = TextEditingController();
   bool passwordVisible = false;
+  HomeController controller = Get.put(HomeController());
 
   @override
   void initState() {
     super.initState();
     passwordVisible = true;
+    controller.getCurrentUser();
   }
 
   @override
@@ -45,6 +51,19 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
+                    textInputAction: TextInputAction.next,
+                    controller: txtName,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        fillColor: Colors.grey,
+                        labelText: "Name"),
+                  ),
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    textInputAction: TextInputAction.next,
                     controller: txtEmail,
                     validator: (value) => EmailValidator.validate(value!)
                         ? null
@@ -59,6 +78,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
+                    textInputAction: TextInputAction.done,
                     controller: txtPassword,
                     obscureText: passwordVisible,
                     validator: (value) {
@@ -96,6 +116,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         if (formKey.currentState!.validate()) {
                           await FireAuthHelper.helper
                               .signUpAuth(txtEmail.text, txtPassword.text);
+                          HomeModel model = HomeModel(
+                              userName: txtName.text, userEmail: txtEmail.text);
+                          FireAuthHelper.helper.checkUser();
+                          FirebaseDBHelper.helper.getUser(model);
                           Get.back();
                         }
                       },
